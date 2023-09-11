@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mohammedabdnewproject/views/Login_View.dart';
+import 'package:mohammedabdnewproject/views/Register_View.dart';
 
 import 'firebase_options.dart';
 
@@ -15,36 +17,42 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData.dark(),
-        debugShowCheckedModeBanner: false,
-        home: const HomePage());
+      theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+      routes: {
+        "/Register/": (context) => RegisterView(),
+        "/Login/": (context) => LoginView()
+      },
+    );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home page'),
-      ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done :
-              final user= FirebaseAuth.instance.currentUser;
-              if(user?.emailVerified??false){print('you are a verified user');}
-              else{print('you need to verified your email first');}
-              return Center(child: const Text('done'));
-            default:
-              return Center(child: const Text('Loading...'));
-          }
-        },
-      ),
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+          // final user = FirebaseAuth.instance.currentUser;
+          // print(user);
+          // if (user?.emailVerified ?? false) {
+          //   return Center(child: const Text('done'));
+          // } else {
+          //   return VerifyEmailView();
+          // }
+
+            
+
+
+            return const LoginView();
+          default:
+            return Center(child: const Text('Loading...'));
+        }
+      },
     );
   }
 }
