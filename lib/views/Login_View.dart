@@ -72,7 +72,7 @@ class _LoginViewState extends State<LoginView> {
                       .pushNamedAndRemoveUntil(MainRoute, (route) => false);
                   Devtools.log('Login successfully');
                 } else {
-                  ShowErrorDialog(context, "your email aren't verify");
+                  Navigator.of(context).pushNamedAndRemoveUntil(VerifyRoute, (route) => false);
                 }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
