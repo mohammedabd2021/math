@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:mohammedabdnewproject/views/Register_View.dart';
-import '../firebase_options.dart';
+// ignore: library_prefixes
+import 'dart:developer'as Devtools show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -53,19 +52,19 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text;
               final password = _password.text;
               try {
-                final user = await FirebaseAuth.instance
+                 await FirebaseAuth.instance
                     .signInWithEmailAndPassword(email: email, password: password);
-                print(user);
-                print('Login successfully');
+                Navigator.of(context).pushNamedAndRemoveUntil("/main/", (route) => false);
+                Devtools.log('Login successfully');
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'unknown') {
-                  print('user not found');
+                  Devtools.log('user not found');
                 } else if (e.code == 'wrong-password') {
-                  print('The password incorrect');
+                  Devtools.log('The password incorrect');
                 } else if (e.code == 'unknown') {
-                  print('You are in a country banned by our application');
+                  Devtools.log('You are in a country banned by our application');
                 } else {
-                  print(e.code);
+                  Devtools.log(e.code);
                 }
               }
               // catch (e) {
