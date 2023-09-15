@@ -40,6 +40,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: const Text('Login'),
       ),
       body: Center(
@@ -64,9 +65,15 @@ class _LoginViewState extends State<LoginView> {
               try {
                 await FirebaseAuth.instance.signInWithEmailAndPassword(
                     email: email, password: password);
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(MainRoute, (route) => false);
-                Devtools.log('Login successfully');
+                // ignore: await_only_futures
+                final user = await FirebaseAuth.instance.currentUser;
+                if ((user != null) && (user.emailVerified)) {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(MainRoute, (route) => false);
+                  Devtools.log('Login successfully');
+                } else {
+                  ShowErrorDialog(context, "your email aren't verify");
+                }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
                   await ShowErrorDialog(context, 'The user not found');
@@ -102,4 +109,3 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
-

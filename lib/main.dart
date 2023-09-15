@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         RegisterRoute: (context) => const RegisterView(),
         LoginRoute: (context) => const LoginView(),
-        MainRoute: (context)=>const notes_view()
+        MainRoute: (context) => const notes_view(),
+        VerifyRoute: (context) => const VerifyEmailView(),
       },
     );
   }
@@ -81,14 +82,16 @@ class notes_viewState extends State<notes_view> {
           title: const Text('Main UI'),
           actions: [
             PopupMenuButton<MenuAction>(
-              onSelected: (value)async {
+              onSelected: (value) async {
                 switch (value) {
-
                   case MenuAction.Logout:
                     final logoutShow = await ShowDialogLogout(context);
-                    if(logoutShow){FirebaseAuth.instance.signOut();}
+                    if (logoutShow) {
+                      FirebaseAuth.instance.signOut();
+                    }
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushNamedAndRemoveUntil(LoginRoute, (_) => false);
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil(LoginRoute, (_) => false);
                 }
               },
               itemBuilder: (context) {
