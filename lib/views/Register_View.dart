@@ -1,8 +1,12 @@
+// ignore_for_file: library_prefixes, non_constant_identifier_names
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as Devtools show log;
 
 import 'package:mohammedabdnewproject/constants/routes.dart';
+
+import '../utilities/show_error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -62,15 +66,19 @@ class _RegisterViewState extends State<RegisterView> {
                 Devtools.log(user1.toString());
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'email-already-in-use') {
-                  Devtools.log('you are already registered');
+                  await ShowErrorDialog(context, 'you are already registered');
                 } else if (e.code == 'weak-password') {
-                  Devtools.log('The password is weak');
+                  await ShowErrorDialog(context, 'This is a weak password');
                 } else if (e.code == 'unknown') {
-                  Devtools.log(
+                  await ShowErrorDialog(context,
                       'You are in a country banned by our application');
                 } else if (e.code == 'invalid-email') {
-                  Devtools.log('The email is invalid');
+                  await ShowErrorDialog(context, 'The email is invalid');
+                } else {
+                  ShowErrorDialog(context, 'Error : ${e.code}');
                 }
+              }catch(e){
+                ShowErrorDialog(context, e.toString());
               }
             },
             child: const Text('Register'),
@@ -86,3 +94,4 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 }
+

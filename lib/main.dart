@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/constants/routes.dart';
 import 'package:mohammedabdnewproject/views/Login_View.dart';
 import 'package:mohammedabdnewproject/views/Register_View.dart';
-import 'package:mohammedabdnewproject/views/Verify_email_view.dart';
+import 'package:mohammedabdnewproject/views/Verify_view.dart';
 import 'dart:developer' as Devtool show log;
 import 'firebase_options.dart';
 

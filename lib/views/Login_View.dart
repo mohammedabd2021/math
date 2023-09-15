@@ -1,9 +1,14 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 // ignore: library_prefixes
-import 'dart:developer'as Devtools show log;
+import 'dart:developer' as Devtools show log;
 
 import 'package:mohammedabdnewproject/constants/routes.dart';
+
+import '../utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -33,7 +38,10 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar:AppBar(title: const Text('Login'),),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
       body: Center(
           child: Column(
         children: [
@@ -54,20 +62,24 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text;
               final password = _password.text;
               try {
-                 await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(email: email, password: password);
-                Navigator.of(context).pushNamedAndRemoveUntil(MainRoute, (route) => false);
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email, password: password);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(MainRoute, (route) => false);
                 Devtools.log('Login successfully');
               } on FirebaseAuthException catch (e) {
-                if (e.code == 'unknown') {
-                  Devtools.log('user not found');
+                if (e.code == 'user-not-found') {
+                  await ShowErrorDialog(context, 'The user not found');
                 } else if (e.code == 'wrong-password') {
-                  Devtools.log('The password incorrect');
+                  await ShowErrorDialog(context, 'The password is wrong');
                 } else if (e.code == 'unknown') {
-                  Devtools.log('You are in a country banned by our application');
+                  await ShowErrorDialog(context,
+                      'You are in a country banned by our application');
                 } else {
-                  Devtools.log(e.code);
+                  ShowErrorDialog(context, 'Error : ${e.code}');
                 }
+              } catch (e) {
+                ShowErrorDialog(context, e.toString());
               }
               // catch (e) {
               //   print('some thing wrong happened');
@@ -90,3 +102,4 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
+
