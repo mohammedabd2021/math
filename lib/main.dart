@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mohammedabdnewproject/constants/routes.dart';
 import 'package:mohammedabdnewproject/views/Login_View.dart';
 import 'package:mohammedabdnewproject/views/Register_View.dart';
 import 'package:mohammedabdnewproject/views/Verify_email_view.dart';
@@ -23,9 +24,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
       routes: {
-        "/Register/": (context) => const RegisterView(),
-        "/Login/": (context) => const LoginView(),
-        "/main/": (context)=>const notes_view()
+        RegisterRoute: (context) => const RegisterView(),
+        LoginRoute: (context) => const LoginView(),
+        MainRoute: (context)=>const notes_view()
       },
     );
   }
@@ -87,7 +88,7 @@ class notes_viewState extends State<notes_view> {
                     final logoutShow = await ShowDialogLogout(context);
                     if(logoutShow){FirebaseAuth.instance.signOut();}
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushNamedAndRemoveUntil('/Login/', (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(LoginRoute, (_) => false);
                 }
               },
               itemBuilder: (context) {

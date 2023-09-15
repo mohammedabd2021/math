@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 // ignore: library_prefixes
 import 'dart:developer'as Devtools show log;
 
+import 'package:mohammedabdnewproject/constants/routes.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -54,7 +56,7 @@ class _LoginViewState extends State<LoginView> {
               try {
                  await FirebaseAuth.instance
                     .signInWithEmailAndPassword(email: email, password: password);
-                Navigator.of(context).pushNamedAndRemoveUntil("/main/", (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(MainRoute, (route) => false);
                 Devtools.log('Login successfully');
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'unknown') {
@@ -78,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
               onPressed: () {
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/Register/',
+                  RegisterRoute,
                   (route) => false,
                 );
               },
