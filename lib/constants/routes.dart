@@ -2,4 +2,5 @@
 
 const LoginRoute = '/Login/';
 const  RegisterRoute = '/Register/';
-const MainRoute = '/main/';
+const MainRoute = '/Main/';
+const VerifyRoute='/Verify/';
