@@ -38,7 +38,10 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(50),
+          )),
         title: const Text('sign in'),
       ),
       body: Center(

@@ -15,7 +15,10 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(50),
+          )),
         title: const Text('Verify email'),
       ),
       body: Column(children: [

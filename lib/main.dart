@@ -6,8 +6,10 @@ import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/views/Login_View.dart';
 import 'package:mohammedabdnewproject/views/Register_View.dart';
 import 'package:mohammedabdnewproject/views/Verify_view.dart';
-import 'package:mohammedabdnewproject/views/main_view.dart';
+import 'package:mohammedabdnewproject/views/notes/main_view.dart';
 import 'dart:developer' as Devtool show log;
+
+import 'package:mohammedabdnewproject/views/notes/notes_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
         LoginRoute: (context) => const LoginView(),
         MainRoute: (context) => const notes_view(),
         VerifyRoute: (context) => const VerifyEmailView(),
+        notesView :(context) => const NewNote()
       },
     );
   }
@@ -41,12 +44,14 @@ class HomePage extends StatelessWidget {
       future:AuthServices.firebase().initialize()      ,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
+          // case ConnectionState.waiting:
+          //   return  const Center(child: CircularProgressIndicator());
           case ConnectionState.done:
             final user = AuthServices.firebase().currentUser;
             if (user != null) {
               if (user.isEmailVerified) {
                 Devtool.log(user.toString());
-                return const LoginView();
+                return const notes_view();
               } else {
                 return const VerifyEmailView();
               }

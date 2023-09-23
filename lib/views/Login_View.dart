@@ -41,7 +41,10 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: const ContinuousRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(50),
+            )),
         title: const Text('Login'),
       ),
       body: Center(
