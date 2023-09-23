@@ -78,7 +78,7 @@ class notes_viewState extends State<notes_view> {
             onPressed: () {Navigator.of(context).pushNamed(notesView);},
             backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
             child: const Icon(
-              Icons.add,
+              Icons. edit_note_sharp,
               size: 60,
               color: Colors.white,
             )),
