@@ -54,7 +54,7 @@ class notes_viewState extends State<notes_view> {
                 color: Colors.amber,
               ),
               onSelected: (value) async {
-                print(value);
+
                 switch (value) {
                   case MenuAction.Logout:
                     final logoutShow = await ShowDialogLogout(context);
