@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/constants/routes.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
-import 'package:mohammedabdnewproject/views/Login_View.dart';
-import 'package:mohammedabdnewproject/views/Register_View.dart';
+import 'package:mohammedabdnewproject/views/login_view.dart';
+import 'package:mohammedabdnewproject/views/register_view.dart';
 import 'package:mohammedabdnewproject/views/Verify_view.dart';
-import 'package:mohammedabdnewproject/views/notes/main_view.dart';
+import 'package:mohammedabdnewproject/views/notes/notes_view.dart';
 import 'dart:developer' as Devtool show log;
 
-import 'package:mohammedabdnewproject/views/notes/notes_view.dart';
+import 'package:mohammedabdnewproject/views/notes/new_note.dart';
 
 void main() {
   runApp(const MyApp());

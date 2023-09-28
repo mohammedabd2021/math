@@ -1,76 +1,36 @@
+// ignore_for_file: camel_case_types
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:mohammedabdnewproject/enums/menu_action.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/services/crud/notes_service.dart';
+import 'package:mohammedabdnewproject/views/login_view.dart';
+import 'package:mohammedabdnewproject/views/notes/new_note.dart';
 
-class NewNote extends StatefulWidget {
-  const NewNote({super.key});
+class notes_view extends StatefulWidget {
+  const notes_view({Key? key}) : super(key: key);
 
   @override
-  State<NewNote> createState() => _NewNoteState();
+  State<notes_view> createState() => notes_viewState();
 }
 
-class _NewNoteState extends State<NewNote> {
-  void _textControllerListener() async {
-    final note = _note;
-    if (note == null) {
-      return;
-    }
-    final text = _textController.text;
-    await _notesService.updateNote(note: note, text: text);
-  }
+// ignore: constant_identifier_names
 
-  void _setUpTextControllerListener() {
-    _textController.removeListener(() {
-      _textControllerListener();
-    });
-    _textController.addListener(() {
-      _textControllerListener();
-    });
-  }
+class notes_viewState extends State<notes_view> {
+  String get userEmail => AuthServices.firebase().currentUser!.email!;
+  late final NotesService _notesService;
 
   @override
   void initState() {
-    _textController = TextEditingController();
     _notesService = NotesService();
     super.initState();
   }
 
-  DatabaseNotes? _note;
-  late final NotesService _notesService;
-  late final TextEditingController _textController;
-
-// ignore: non_constant_identifier_names
-  Future<DatabaseNotes> CreateNote() async {
-    final noteIsExist = _note;
-    if (noteIsExist != null) {
-      return noteIsExist;
-    }
-    final currentUser = AuthServices.firebase().currentUser!;
-    final email = currentUser.email!;
-    final owner = await _notesService.getUser(email: email);
-    return await _notesService.createNotes(owner: owner);
-  }
-
-  void _deleteNoteIFEmpty() {
-    final note = _note;
-    if (_textController.text.isEmpty && note != null) {
-      _notesService.deleteNote(id: note.id);
-    }
-  }
-
-  void _saveNoteIfNotEmpty() {
-    final note = _note;
-    final text = _textController.text;
-    if (text.isNotEmpty && note != null) {
-      _notesService.updateNote(note: note, text: text);
-    }
-  }
-
   @override
   void dispose() {
-    _deleteNoteIFEmpty();
-    _saveNoteIfNotEmpty();
-    _textController.dispose();
+    _notesService.close();
     super.dispose();
   }
 
@@ -78,25 +38,128 @@ class _NewNoteState extends State<NewNote> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: const Text(
+            'Your Notes ',
+            style: TextStyle(color: Colors.amber),
+          ),
+          centerTitle: true,
           shape: const ContinuousRectangleBorder(
               borderRadius: BorderRadius.all(
             Radius.circular(50),
           )),
-          title: const Text('New Note'),
-          centerTitle: true,
+          actions: [
+            PopupMenuButton<MenuAction>(
+              icon: const Icon(
+                Icons.swipe_vertical_outlined,
+                color: Colors.amber,
+              ),
+              onSelected: (value) async {
+                print(value);
+                switch (value) {
+                  case MenuAction.Logout:
+                    final logoutShow = await ShowDialogLogout(context);
+                    if (logoutShow) {
+                      await AuthServices.firebase().logOut();
+
+                    // ignore: use_build_context_synchronously
+                      Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: const Duration(milliseconds: 500),
+                            pageBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation) {
+                              return const LoginView();
+                            },
+                            transitionsBuilder: (
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child,
+                                ) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(1.0, 0.0),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                          ));
+                }}
+              },
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem<MenuAction>(
+                    value: MenuAction.Logout,
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.logout_rounded,
+                          color: Colors.amber,
+                        ),
+                        Text(' Logout'),
+                      ],
+                    ),
+                  )
+                ];
+              },
+            )
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: FloatingActionButton(
+          splashColor: Colors.black12,
+          onPressed: () {
+            Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 500),
+                  pageBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation) {
+                    return const NewNote();
+                  },
+                  transitionsBuilder: (
+                    context,
+                    animation,
+                    secondaryAnimation,
+                    child,
+                  ) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ));
+          },
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+          child: const Icon(
+            Icons.edit_note_sharp,
+            size: 60,
+            color: Colors.amber,
+          ),
         ),
         body: FutureBuilder(
-          future: CreateNote(),
+          future: _notesService.getOrCreateUser(email: userEmail),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
-                _note = snapshot.data as DatabaseNotes;
-                _setUpTextControllerListener();
-                return TextField(
-                  controller: _textController,
-                  keyboardType: TextInputType.multiline,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter your note'),
+                return StreamBuilder(
+                  stream: _notesService.allNotes,
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(
+                          child: CircularProgressIndicator(color: Colors.amber),
+                        );
+                      default:
+                        return const CircularProgressIndicator();
+                    }
+                  },
                 );
               default:
                 return const CircularProgressIndicator();
@@ -104,4 +167,34 @@ class _NewNoteState extends State<NewNote> {
           },
         ));
   }
+}
+
+// ignore: non_constant_identifier_names
+Future<bool> ShowDialogLogout(BuildContext context) {
+  return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.amber),
+                )),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.amber),
+                ))
+          ],
+          title: const Text('Logout'),
+          content: const Text('are you sure you want to  sign out?'),
+        );
+      }).then((value) => value ?? false);
 }
