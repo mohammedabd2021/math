@@ -332,6 +332,7 @@ class NotesService {
   Future<void> _ensureDbIsOpen() async {
     try {
       await open();
+    // ignore: empty_catches
     } on DatabaseAlreadyOpenException {}
   }
 
@@ -378,14 +379,20 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final notes = await db.query(noteTabel);
-    return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+    return notes.map(
+      (noteRow) => DatabaseNote.fromRow(noteRow),
+    );
   }
 
   Future<DatabaseNote> getNote({required int id}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
-    final notes =
-        await db.query(noteTabel, limit: 1, where: 'id = ?', whereArgs: [id]);
+    final notes = await db.query(
+      noteTabel,
+      limit: 1,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
     if (notes.isEmpty) {
       throw NoteNotFoundException();
     } else {
@@ -477,8 +484,10 @@ class NotesService {
     if (results.isNotEmpty) {
       throw UserAlreadyExistsException();
     }
-    final userId =
-        await db.insert(userTabel, {emailColumn: email.toLowerCase()});
+    final userId = await db.insert(
+      userTabel,
+      {emailColumn: email.toLowerCase()},
+    );
     return DatabaseUser(id: userId, email: email);
   }
 

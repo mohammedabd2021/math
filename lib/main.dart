@@ -12,6 +12,7 @@ import 'dart:developer' as Devtool show log;
 import 'package:mohammedabdnewproject/views/notes/new_note.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

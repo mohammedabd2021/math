@@ -54,29 +54,29 @@ class notes_viewState extends State<notes_view> {
                 color: Colors.amber,
               ),
               onSelected: (value) async {
-
                 switch (value) {
                   case MenuAction.Logout:
                     final logoutShow = await ShowDialogLogout(context);
                     if (logoutShow) {
                       await AuthServices.firebase().logOut();
 
-                    // ignore: use_build_context_synchronously
+                      // ignore: use_build_context_synchronously
                       Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            transitionDuration: const Duration(milliseconds: 500),
+                            transitionDuration:
+                                const Duration(milliseconds: 500),
                             pageBuilder: (BuildContext context,
                                 Animation<double> animation,
                                 Animation<double> secondaryAnimation) {
                               return const LoginView();
                             },
                             transitionsBuilder: (
-                                context,
-                                animation,
-                                secondaryAnimation,
-                                child,
-                                ) {
+                              context,
+                              animation,
+                              secondaryAnimation,
+                              child,
+                            ) {
                               return SlideTransition(
                                 position: Tween<Offset>(
                                   begin: const Offset(1.0, 0.0),
@@ -86,7 +86,8 @@ class notes_viewState extends State<notes_view> {
                               );
                             },
                           ));
-                }}
+                    }
+                }
               },
               itemBuilder: (context) {
                 return [
@@ -150,9 +151,13 @@ class notes_viewState extends State<notes_view> {
               case ConnectionState.done:
                 return StreamBuilder(
                   stream: _notesService.allNotes,
-                  builder: (context, snapshot) {
+                  builder: (
+                    context,
+                    snapshot,
+                  ) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
+                      case ConnectionState.active:
                         return const Center(
                           child: CircularProgressIndicator(color: Colors.amber),
                         );

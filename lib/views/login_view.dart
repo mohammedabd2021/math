@@ -165,8 +165,12 @@ class _LoginViewState extends State<LoginView> {
                           Animation<double> secondaryAnimation) {
                         return const RegisterView();
                       },
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
+                      transitionsBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                        child,
+                      ) {
                         return SlideTransition(
                           position: Tween<Offset>(
                             begin: const Offset(1.0, 0.0),
