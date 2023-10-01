@@ -43,7 +43,7 @@ class _RegisterViewState extends State<RegisterView> {
             borderRadius: BorderRadius.all(
           Radius.circular(50),
         )),
-        title: const Text('sign in'),
+        title: const Text('sign in',style: TextStyle(color: Colors.amber)),
       ),
       body: Center(
           child: Column(

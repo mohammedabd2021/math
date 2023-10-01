@@ -33,7 +33,9 @@ class notes_viewState extends State<notes_view> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: AppBar(leading: IconButton(onPressed: (){setState(() {
+
+        });}, icon: const Icon(Icons.refresh_outlined,color: Colors.amber,)),
           title: const Text(
             'Your Notes ',
             style: TextStyle(color: Colors.amber),
