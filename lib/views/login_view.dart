@@ -7,9 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/views/register_view.dart';
 import 'package:mohammedabdnewproject/views/Verify_view.dart';
-
 import '../services/auth/auth_exceptions.dart';
-import '../utilities/show_error_dialog.dart';
+import '../utilities/dialogs/error_dialog.dart';
 import 'notes/notes_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -79,6 +78,8 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
+              print(email);
+
               try {
                 await AuthServices.firebase()
                     .logIn(id: email, password: password);
@@ -136,11 +137,11 @@ class _LoginViewState extends State<LoginView> {
                       ));
                 }
               } on UserNotFoundAuthException {
-                await ShowErrorDialog(context, 'The user not found');
+                await showErrorDialog(context, 'The user not found');
               } on WrongPasswordAuthException {
-                await ShowErrorDialog(context, 'The password is wrong');
+                await showErrorDialog(context, 'The password is wrong');
               } on GenericAuthException {
-                ShowErrorDialog(context, 'Authentication error!');
+                showErrorDialog(context, 'Authentication error!');
               }
 
               // catch (e) {

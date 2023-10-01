@@ -43,15 +43,17 @@ class _NewNoteState extends State<NewNote> {
     if (existingNote != null) {
       return existingNote;
     }
-    final email = AuthServices.firebase().currentUser!.email!;
+    final user = AuthServices.firebase().currentUser!;
+    final email = user.email!;
     final owner = await _notesService.getUser(email: email);
+    print(email);
     return await _notesService.createNote(owner: owner);
   }
 
-  void _deleteNoteIfTextIsEmpty() {
+  void _deleteNoteIfTextIsEmpty()async {
     final note = _note;
     if (_textEditingController.text.isEmpty && note != null) {
-      _notesService.deleteNote(id: note.id);
+     await _notesService.deleteNote(id: note.id);
     }
   }
 
@@ -60,6 +62,7 @@ class _NewNoteState extends State<NewNote> {
     final text = _textEditingController.text;
     if (note != null && _textEditingController.text.isNotEmpty) {
       await _notesService.updateNote(note: note, text: text);
+      // print(text);
     }
   }
 
@@ -89,16 +92,18 @@ class _NewNoteState extends State<NewNote> {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
 
-              _note = snapshot.data as DatabaseNote?;
+              _note = snapshot.data as DatabaseNote;
               _setupTextControllerListener();
+              // print(_textEditingController.text);
               return TextField(
                   controller: _textEditingController,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: const InputDecoration(
                       hintText: 'write your note here :'));
+
             default:
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator(color:Colors.amber));
           }
         },
       ),

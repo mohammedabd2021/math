@@ -1,13 +1,14 @@
 // ignore_for_file: camel_case_types
 
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/enums/menu_action.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/services/crud/notes_service.dart';
+import 'package:mohammedabdnewproject/utilities/dialogs/logout_dialog.dart';
 import 'package:mohammedabdnewproject/views/login_view.dart';
 import 'package:mohammedabdnewproject/views/notes/new_note.dart';
+import 'package:mohammedabdnewproject/views/notes/note_list_view.dart';
 
 class notes_view extends StatefulWidget {
   const notes_view({Key? key}) : super(key: key);
@@ -26,12 +27,6 @@ class notes_viewState extends State<notes_view> {
   void initState() {
     _notesService = NotesService();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _notesService.close();
-    super.dispose();
   }
 
   @override
@@ -56,7 +51,7 @@ class notes_viewState extends State<notes_view> {
               onSelected: (value) async {
                 switch (value) {
                   case MenuAction.Logout:
-                    final logoutShow = await ShowDialogLogout(context);
+                    final logoutShow = await showLogoutDialog(context);
                     if (logoutShow) {
                       await AuthServices.firebase().logOut();
 
@@ -108,7 +103,7 @@ class notes_viewState extends State<notes_view> {
             )
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.black12,
           onPressed: () {
@@ -137,11 +132,11 @@ class notes_viewState extends State<notes_view> {
                   },
                 ));
           },
-          backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+          backgroundColor: Colors.amber,
           child: const Icon(
             Icons.edit_note_sharp,
-            size: 60,
-            color: Colors.amber,
+            size: 40,
+            color: Colors.black,
           ),
         ),
         body: FutureBuilder(
@@ -151,23 +146,36 @@ class notes_viewState extends State<notes_view> {
               case ConnectionState.done:
                 return StreamBuilder(
                   stream: _notesService.allNotes,
-                  builder: (
-                    context,
-                    snapshot,
-                  ) {
+                  builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
                       case ConnectionState.active:
-                        return const Center(
-                          child: CircularProgressIndicator(color: Colors.amber),
-                        );
+                        if (snapshot.hasData) {
+                          final allNotes = snapshot.data as List<DatabaseNote>;
+                          return NotesListView(
+                              notes: allNotes,
+                              onDeleteNote: (note) async {
+                                await _notesService.deleteNote(id: note.id);
+                              });
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.amber,
+                          ));
+                        }
                       default:
-                        return const CircularProgressIndicator();
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.amber,
+                        ));
                     }
                   },
                 );
               default:
-                return const CircularProgressIndicator();
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.amber,
+                ));
             }
           },
         ));
@@ -175,31 +183,3 @@ class notes_viewState extends State<notes_view> {
 }
 
 // ignore: non_constant_identifier_names
-Future<bool> ShowDialogLogout(BuildContext context) {
-  return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.amber),
-                )),
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: const Text(
-                  'Logout',
-                  style: TextStyle(color: Colors.amber),
-                ))
-          ],
-          title: const Text('Logout'),
-          content: const Text('are you sure you want to  sign out?'),
-        );
-      }).then((value) => value ?? false);
-}

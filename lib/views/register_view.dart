@@ -5,9 +5,8 @@ import 'dart:developer' as Devtools show log;
 
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/views/login_view.dart';
-
 import '../services/auth/auth_exceptions.dart';
-import '../utilities/show_error_dialog.dart';
+import '../utilities/dialogs/error_dialog.dart';
 import 'Verify_view.dart';
 
 class RegisterView extends StatefulWidget {
@@ -103,13 +102,13 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     ));
               } on EmailIsAlreadyInUseAuthException {
-                await ShowErrorDialog(context, 'you are already registered');
+                await showErrorDialog(context, 'you are already registered');
               } on WeakPasswordAuthException {
-                await ShowErrorDialog(context, 'This is a weak password');
+                await showErrorDialog(context, 'This is a weak password');
               } on InvalidEmailAuthException {
-                await ShowErrorDialog(context, 'The email is invalid');
+                await showErrorDialog(context, 'The email is invalid');
               } on GenericAuthException {
-                ShowErrorDialog(context, 'Authentication error!');
+                showErrorDialog(context, 'Authentication error!');
               }
             },
             child:
