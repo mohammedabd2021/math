@@ -1,14 +1,15 @@
 // ignore_for_file: camel_case_types
 
-
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/enums/menu_action.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/services/crud/notes_service.dart';
 import 'package:mohammedabdnewproject/utilities/dialogs/logout_dialog.dart';
-import 'package:mohammedabdnewproject/views/login_view.dart';
-import 'package:mohammedabdnewproject/views/notes/new_note.dart';
+import 'package:mohammedabdnewproject/views/auth/login_view.dart';
+import 'package:mohammedabdnewproject/views/notes/create_update_note_view.dart';
 import 'package:mohammedabdnewproject/views/notes/note_list_view.dart';
+
+import '../../constants/routes.dart';
 
 class notes_view extends StatefulWidget {
   const notes_view({Key? key}) : super(key: key);
@@ -103,7 +104,7 @@ class notes_viewState extends State<notes_view> {
             )
           ],
         ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.black12,
           onPressed: () {
@@ -114,7 +115,7 @@ class notes_viewState extends State<notes_view> {
                   pageBuilder: (BuildContext context,
                       Animation<double> animation,
                       Animation<double> secondaryAnimation) {
-                    return const NewNote();
+                    return const CreateUpdateNote();
                   },
                   transitionsBuilder: (
                     context,
@@ -153,10 +154,17 @@ class notes_viewState extends State<notes_view> {
                         if (snapshot.hasData) {
                           final allNotes = snapshot.data as List<DatabaseNote>;
                           return NotesListView(
-                              notes: allNotes,
-                              onDeleteNote: (note) async {
-                                await _notesService.deleteNote(id: note.id);
-                              });
+                            notes: allNotes,
+                            onDeleteNote: (note) async {
+                              await _notesService.deleteNote(id: note.id);
+                            },
+                            onTap: (note) {
+                              Navigator.of(context).pushNamed(
+                                createUpdate,
+                                arguments: note,
+                              );
+                            },
+                          );
                         } else {
                           return const Center(
                               child: CircularProgressIndicator(

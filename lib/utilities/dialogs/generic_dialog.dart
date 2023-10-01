@@ -21,11 +21,12 @@ Future<T?> showGenericDialog<T>({
                 onPressed: () {
                   if (value != null) {
                     Navigator.of(context).pop(value);
-                  }else{
+                  } else {
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text(optionTitle));
+                child: Text(optionTitle,
+                    style: const TextStyle(color: Colors.amber)));
           }).toList(),
         );
       });

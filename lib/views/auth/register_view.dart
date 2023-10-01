@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'dart:developer' as Devtools show log;
 
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
-import 'package:mohammedabdnewproject/views/login_view.dart';
-import '../services/auth/auth_exceptions.dart';
-import '../utilities/dialogs/error_dialog.dart';
+import 'package:mohammedabdnewproject/views/auth/login_view.dart';
+import '../../services/auth/auth_exceptions.dart';
+import '../../utilities/dialogs/error_dialog.dart';
 import 'Verify_view.dart';
 
 class RegisterView extends StatefulWidget {

@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/constants/routes.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
-import 'package:mohammedabdnewproject/views/login_view.dart';
-import 'package:mohammedabdnewproject/views/register_view.dart';
-import 'package:mohammedabdnewproject/views/Verify_view.dart';
+import 'package:mohammedabdnewproject/views/auth/login_view.dart';
+import 'package:mohammedabdnewproject/views/auth/register_view.dart';
+import 'package:mohammedabdnewproject/views/auth/Verify_view.dart';
 import 'package:mohammedabdnewproject/views/notes/notes_view.dart';
 import 'dart:developer' as Devtool show log;
 
-import 'package:mohammedabdnewproject/views/notes/new_note.dart';
+import 'package:mohammedabdnewproject/views/notes/create_update_note_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
         LoginRoute: (context) => const LoginView(),
         MainRoute: (context) => const notes_view(),
         VerifyRoute: (context) => const VerifyEmailView(),
-        notesView :(context) => const NewNote()
+        createUpdate :(context) => const CreateUpdateNote()
+
       },
     );
   }

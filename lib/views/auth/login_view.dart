@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 // ignore: library_prefixes
 
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
-import 'package:mohammedabdnewproject/views/register_view.dart';
-import 'package:mohammedabdnewproject/views/Verify_view.dart';
-import '../services/auth/auth_exceptions.dart';
-import '../utilities/dialogs/error_dialog.dart';
-import 'notes/notes_view.dart';
+import 'package:mohammedabdnewproject/views/auth/register_view.dart';
+import 'package:mohammedabdnewproject/views/auth/Verify_view.dart';
+import '../../services/auth/auth_exceptions.dart';
+import '../../utilities/dialogs/error_dialog.dart';
+import '../notes/notes_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);

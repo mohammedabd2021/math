@@ -4,4 +4,5 @@ const LoginRoute = '/Login/';
 const  RegisterRoute = '/Register/';
 const MainRoute = '/Main/';
 const VerifyRoute='/Verify/';
-const notesView = '/notes/';
+
+const createUpdate = '/notes/';

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
-import 'package:mohammedabdnewproject/views/register_view.dart';
+import 'package:mohammedabdnewproject/views/auth/register_view.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
