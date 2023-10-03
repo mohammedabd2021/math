@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 class AuthUser {
   final String id;
   final bool isEmailVerified;
-  final String? email;
+  final String email;
 
   const AuthUser({
     required this.id,
@@ -15,7 +15,7 @@ class AuthUser {
 
   factory AuthUser.fromFirebase(User user) => AuthUser(
         isEmailVerified: user.emailVerified,
-        email: user.email,
+        email: user.email!,
         id: user.uid,
       );
 }

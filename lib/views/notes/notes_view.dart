@@ -3,13 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/enums/menu_action.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
-import 'package:mohammedabdnewproject/services/crud/notes_service.dart';
+import 'package:mohammedabdnewproject/services/cloud/firebase_cloud_storage.dart';
 import 'package:mohammedabdnewproject/utilities/dialogs/logout_dialog.dart';
 import 'package:mohammedabdnewproject/views/auth/login_view.dart';
 import 'package:mohammedabdnewproject/views/notes/create_update_note_view.dart';
 import 'package:mohammedabdnewproject/views/notes/note_list_view.dart';
 
 import '../../constants/routes.dart';
+import '../../services/cloud/cloud_Note.dart';
 
 class notes_view extends StatefulWidget {
   const notes_view({Key? key}) : super(key: key);
@@ -21,21 +22,19 @@ class notes_view extends StatefulWidget {
 // ignore: constant_identifier_names
 
 class notes_viewState extends State<notes_view> {
-  String get userEmail => AuthServices.firebase().currentUser!.email!;
-  late final NotesService _notesService;
+  String get userId => AuthServices.firebase().currentUser!.id;
+  late final FirebaseCloudStorage _notesService;
 
   @override
   void initState() {
-    _notesService = NotesService();
+    _notesService = FirebaseCloudStorage();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(leading: IconButton(onPressed: (){setState(() {
-
-        });}, icon: const Icon(Icons.refresh_outlined,color: Colors.amber,)),
+        appBar: AppBar(
           title: const Text(
             'Your Notes ',
             style: TextStyle(color: Colors.amber),
@@ -89,10 +88,10 @@ class notes_viewState extends State<notes_view> {
               },
               itemBuilder: (context) {
                 return [
-                  PopupMenuItem<MenuAction>(
+                  const PopupMenuItem<MenuAction>(
                     value: MenuAction.Logout,
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(
                           Icons.logout_rounded,
                           color: Colors.amber,
@@ -142,50 +141,37 @@ class notes_viewState extends State<notes_view> {
             color: Colors.black,
           ),
         ),
-        body: FutureBuilder(
-          future: _notesService.getOrCreateUser(email: userEmail),
+        body: StreamBuilder(
+          stream: _notesService.allNotes(ownerUserId: userId),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return StreamBuilder(
-                  stream: _notesService.allNotes,
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                      case ConnectionState.active:
-                        if (snapshot.hasData) {
-                          final allNotes = snapshot.data as List<DatabaseNote>;
-                          return NotesListView(
-                            notes: allNotes,
-                            onDeleteNote: (note) async {
-                              await _notesService.deleteNote(id: note.id);
-                            },
-                            onTap: (note) {
-                              Navigator.of(context).pushNamed(
-                                createUpdate,
-                                arguments: note,
-                              );
-                            },
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator(
-                            color: Colors.amber,
-                          ));
-                        }
-                      default:
-                        return const Center(
-                            child: CircularProgressIndicator(
-                          color: Colors.amber,
-                        ));
-                    }
-                  },
-                );
+              case ConnectionState.waiting:
+              case ConnectionState.active:
+                if (snapshot.hasData) {
+                  final allNotes = snapshot.data as Iterable<CloudNote>;
+                  return NotesListView(
+                    notes: allNotes,
+                    onDeleteNote: (note) async {
+                      await _notesService.deleteNote(documentId: note.documentId);
+                    },
+                    onTap: (note) {
+                      Navigator.of(context).pushNamed(
+                        createUpdate,
+                        arguments: note,
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.amber,
+                      ));
+                }
               default:
                 return const Center(
                     child: CircularProgressIndicator(
-                  color: Colors.amber,
-                ));
+                      color: Colors.amber,
+                    ));
             }
           },
         ));
