@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
+import 'package:mohammedabdnewproject/utilities/dialogs/cannot_share_empty_dialog.dart';
 import 'package:mohammedabdnewproject/utilities/get_argument.dart';
-import 'package:mohammedabdnewproject/services/cloud/cloud_storage_exceptions.dart';
 import 'package:mohammedabdnewproject/services/cloud/cloud_note.dart';
 import 'package:mohammedabdnewproject/services/cloud/firebase_cloud_storage.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNote extends StatefulWidget {
   const CreateUpdateNote({super.key});
@@ -56,7 +57,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
     final userId = user.id; // print(email);
     final newNote = await _notesService.createNewNote(ownerUserId: userId);
 
-    _note = newNote ;// --------------------- problem here
+    _note = newNote; // --------------------- problem here
     return newNote;
   }
 
@@ -91,6 +92,19 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () async{
+              final text = _textEditingController.text;
+              if (_note == null ||text.isEmpty) {
+                await showCanNotShareEmptyDialog(context);
+              }  else{
+                Share.share(text);
+              }
+            },
+            icon: const Icon(Icons.share_outlined, color: Colors.amber),
+          )
+        ],
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(50),
@@ -115,7 +129,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                       labelStyle: TextStyle(color: Colors.amber),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.amber)),
-                      hintText: ' write your note here :'));
+                      hintText: '      write your note here :'));
 
             default:
               return const Center(

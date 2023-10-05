@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../services/cloud/cloud_Note.dart';
+import '../../services/cloud/cloud_note.dart';
 import '../../utilities/dialogs/delete_dialog.dart';
 
 typedef NoteCallBack = void Function(CloudNote note);
@@ -20,13 +20,12 @@ class NotesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics:  const BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: notes.length,
       itemBuilder: (context, index) {
         final note = notes.elementAt(index);
         return ListTile(
-
-          onTap:(){
+          onTap: () {
             onTap(note);
           },
           title: Text(

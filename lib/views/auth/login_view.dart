@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:mohammedabdnewproject/animation/fade_animation.dart';
 
 // ignore: library_prefixes
 
@@ -88,28 +89,10 @@ class _LoginViewState extends State<LoginView> {
                 if ((user != null) && (user.isEmailVerified)) {
                   Navigator.pushReplacement(
                       context,
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (BuildContext context,
-                            Animation<double> animation,
-                            Animation<double> secondaryAnimation) {
-                          return const notes_view();
-                        },
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(1.0, 0.0),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: child,
-                          );
-                        },
-                      ));
+                      FadePageRouteBuilder(
+                        page: const notes_view(),
+                      )
+                  );
                 } else {
                   Navigator.pushReplacement(
                       context,
