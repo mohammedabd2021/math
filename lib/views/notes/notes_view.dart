@@ -61,7 +61,7 @@ class notes_viewState extends State<notes_view> {
                     await AuthServices.firebase().logOut();
 
                     // ignore: use_build_context_synchronously
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       FadePageRouteBuilder(
                         page: const LoginView(),
