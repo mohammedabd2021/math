@@ -1,16 +1,15 @@
 // ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:mohammedabdnewproject/animation/fade_animation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: library_prefixes
 
-import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/views/auth/register_view.dart';
-import 'package:mohammedabdnewproject/views/auth/Verify_view.dart';
 import '../../services/auth/auth_exceptions.dart';
+import '../../services/auth/bloc/auth_bloc.dart';
+import '../../services/auth/bloc/auth_event.dart';
 import '../../utilities/dialogs/error_dialog.dart';
-import '../notes/notes_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -79,46 +78,9 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
-              print(email);
 
               try {
-                await AuthServices.firebase()
-                    .logIn(id: email, password: password);
-                // ignore: await_only_futures
-                final user = await AuthServices.firebase().currentUser;
-                if ((user != null) && (user.isEmailVerified)) {
-                  Navigator.pushReplacement(
-                      context,
-                      FadePageRouteBuilder(
-                        page: const notes_view(),
-                      )
-                  );
-                } else {
-                  Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (BuildContext context,
-                            Animation<double> animation,
-                            Animation<double> secondaryAnimation) {
-                          return const VerifyEmailView();
-                        },
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(1.0, 0.0),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: child,
-                          );
-                        },
-                      ));
-                }
+                context.read<AuthBloc>().add(AuthEventLogIn(email, password));
               } on UserNotFoundAuthException {
                 await showErrorDialog(context, 'The user not found');
               } on WrongPasswordAuthException {

@@ -1,17 +1,18 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
-import 'package:mohammedabdnewproject/animation/fade_animation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'show ReadContext;
 import 'package:mohammedabdnewproject/enums/menu_action.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
+import 'package:mohammedabdnewproject/services/auth/bloc/auth_event.dart';
 import 'package:mohammedabdnewproject/services/cloud/firebase_cloud_storage.dart';
 import 'package:mohammedabdnewproject/utilities/dialogs/logout_dialog.dart';
-import 'package:mohammedabdnewproject/views/auth/login_view.dart';
 import 'package:mohammedabdnewproject/views/notes/create_update_note_view.dart';
 import 'package:mohammedabdnewproject/views/notes/note_list_view.dart';
 
 import '../../animation/slide_animation.dart';
 import '../../constants/routes.dart';
+import '../../services/auth/bloc/auth_bloc.dart';
 import '../../services/cloud/cloud_note.dart';
 
 class notes_view extends StatefulWidget {
@@ -58,15 +59,12 @@ class notes_viewState extends State<notes_view> {
                 case MenuAction.Logout:
                   final logoutShow = await showLogoutDialog(context);
                   if (logoutShow) {
-                    await AuthServices.firebase().logOut();
+                    // ignore: use_build_context_synchronously
+                    context.read<AuthBloc>().add(
+                          const AuthEventLogOut(),
+                        );
 
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacement(
-                      context,
-                      FadePageRouteBuilder(
-                        page: const LoginView(),
-                      ),
-                    );
                   }
               }
             },
