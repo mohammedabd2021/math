@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart'show immutable;
+import 'package:flutter/foundation.dart' show immutable;
 
 import '../auth_user.dart';
 
@@ -6,24 +6,29 @@ import '../auth_user.dart';
 abstract class AuthState {
   const AuthState();
 }
-class AuthStateLoading extends AuthState{
+
+class AuthStateLoading extends AuthState {
   const AuthStateLoading();
 }
-class AuthStateLogin extends AuthState{
+
+class AuthStateLogin extends AuthState {
   final AuthUser user;
-  const AuthStateLogin (this.user);
+
+  const AuthStateLogin(this.user);
 }
-class AuthStateLoginFailure extends AuthState{
-  final Exception exception;
-  const AuthStateLoginFailure(this.exception);
-}
-class AuthStateNeedsVerification extends AuthState{
+
+class AuthStateNeedsVerification extends AuthState {
   const AuthStateNeedsVerification();
 }
-class AuthStateLoggedOut extends AuthState{
-  const AuthStateLoggedOut();
+
+class AuthStateLoggedOut extends AuthState {
+  final Exception? exception;
+
+  const AuthStateLoggedOut(this.exception);
 }
-class AuthStateLogoutFailure extends AuthState{
+
+class AuthStateLogoutFailure extends AuthState {
   final Exception exception;
+
   const AuthStateLogoutFailure(this.exception);
 }
