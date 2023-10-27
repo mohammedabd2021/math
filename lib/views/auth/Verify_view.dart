@@ -1,8 +1,12 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
+import 'package:mohammedabdnewproject/services/auth/bloc/auth_event.dart';
 import 'package:mohammedabdnewproject/views/auth/login_view.dart';
+
+import '../../services/auth/bloc/auth_bloc.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
@@ -63,8 +67,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             ", press the button below"),
         TextButton(
             onPressed: () async {
-              await AuthServices.firebase().sendEmailVerify();
-            },
+context.read<AuthBloc>().add(const AuthEventSendEmailVerification());            },
             child: const Text('send email verification ',style: TextStyle(color: Colors.amber))),
       ]),
     );
