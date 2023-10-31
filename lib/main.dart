@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mohammedabdnewproject/constants/routes.dart';
+import 'package:mohammedabdnewproject/helpers/loading/loading_screen.dart';
 import 'package:mohammedabdnewproject/services/auth/bloc/auth_bloc.dart';
 import 'package:mohammedabdnewproject/services/auth/bloc/auth_event.dart';
 import 'package:mohammedabdnewproject/services/auth/bloc/auth_state.dart';
@@ -31,10 +32,7 @@ class MyApp extends StatelessWidget {
         create: (context) => AuthBloc(FirebaseAuthProvider()),
         child: const HomePage(),
       ),
-      routes: {
-
-        createUpdate: (context) => const CreateUpdateNote()
-      },
+      routes: {createUpdate: (context) => const CreateUpdateNote()},
     );
   }
 }
@@ -45,21 +43,28 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(const AuthEventInitialize());
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+    return BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+      if (state.isLoading) {
+        LoadingScreen().show(
+            context: context,
+            text: state.loadingText ?? 'Please wait a minute');
+      } else {
+        LoadingScreen().hide();
+      }
+    }, builder: (context, state) {
       if (state is AuthStateLogin) {
         return const notes_view();
       } else if (state is AuthStateNeedsVerification) {
         return const VerifyEmailView();
       } else if (state is AuthStateLoggedOut) {
         return const LoginView();
-      }else if (state is AuthStateRegistering) {
+      } else if (state is AuthStateRegistering) {
         return const RegisterView();
-      }
-      else {
+      } else {
         return const Scaffold(
           body: CircularProgressIndicator(),
         );
       }
     });
-      }
+  }
 }
