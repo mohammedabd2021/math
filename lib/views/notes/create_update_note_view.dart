@@ -17,11 +17,13 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   CloudNote? _note;
   late final FirebaseCloudStorage _notesService;
   late final TextEditingController _textEditingController;
+  late final TextEditingController _titleEditingController;
 
   @override
   void initState() {
     _notesService = FirebaseCloudStorage();
     _textEditingController = TextEditingController();
+    _titleEditingController = TextEditingController();
     super.initState();
   }
 
@@ -31,9 +33,11 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
       return;
     }
     final text = _textEditingController.text;
+    final title = _titleEditingController.text;
     await _notesService.updateNote(
       documentId: note.documentId,
       text: text,
+      title: title,
     );
   }
 
@@ -47,6 +51,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
     if (widgetNote != null) {
       _note = widgetNote;
       _textEditingController.text = widgetNote.text;
+      _titleEditingController.text = widgetNote.title;
       return widgetNote;
     }
     final existingNote = _note;
@@ -63,7 +68,9 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
 
   void _deleteNoteIfTextIsEmpty() async {
     final note = _note;
-    if (_textEditingController.text.isEmpty && note != null) {
+    if (_textEditingController.text.isEmpty &&
+        note != null &&
+        _titleEditingController.text.isEmpty) {
       await _notesService.deleteNote(documentId: note.documentId);
     }
   }
@@ -71,10 +78,14 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   void _saveNoteIfTextNotEmpty() async {
     final note = _note;
     final text = _textEditingController.text;
-    if (note != null && _textEditingController.text.isNotEmpty) {
+    final title = _titleEditingController.text;
+    if (note != null &&
+        _textEditingController.text.isNotEmpty &&
+        _titleEditingController.text.isNotEmpty) {
       await _notesService.updateNote(
         documentId: note.documentId,
         text: text,
+        title: title,
       );
       // print(text);
     }
@@ -85,6 +96,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
     _deleteNoteIfTextIsEmpty();
     _saveNoteIfTextNotEmpty();
     _textEditingController.dispose();
+    _titleEditingController.dispose();
     super.dispose();
   }
 
@@ -94,12 +106,13 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () async{
+            onPressed: () async {
               final text = _textEditingController.text;
-              if (_note == null ||text.isEmpty) {
+              final title = _titleEditingController.text;
+              if (_note == null || (text.isEmpty && title.isEmpty)) {
                 await showCanNotShareEmptyDialog(context);
-              }  else{
-                Share.share(text);
+              } else {
+                Share.share('{$title    $text}');
               }
             },
             icon: const Icon(Icons.share_outlined, color: Colors.amber),
@@ -120,16 +133,29 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
             case ConnectionState.done:
               _setupTextControllerListener();
               // print(_textEditingController.text);
-              return TextField(
+              return Column(
+                children: [TextField(
                   cursorColor: Colors.amber,
-                  controller: _textEditingController,
+                  controller: _titleEditingController,
                   keyboardType: TextInputType.multiline,
-                  maxLines: null,
+                  maxLines: null,textAlign: TextAlign.center,
                   decoration: const InputDecoration(
-                      labelStyle: TextStyle(color: Colors.amber),
+                      labelStyle: TextStyle(color: Colors.amber,fontWeight: FontWeight.bold,),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.amber)),
-                      hintText: '      write your note here :'));
+                      hintText: 'Title')),
+                  TextField(
+                      cursorColor: Colors.amber,
+                      controller: _textEditingController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                          labelStyle: TextStyle(color: Colors.amber),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.amber)),
+                          hintText: '      write your note here :')),
+                ],
+              );
 
             default:
               return const Center(

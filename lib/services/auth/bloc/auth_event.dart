@@ -1,6 +1,5 @@
-import 'package:flutter/foundation.dart' show immutable;
+import 'package:mohammedabdnewproject/services/cloud/cloud_note.dart';
 
-@immutable
 abstract class AuthEvent {
   const AuthEvent();
 }
@@ -13,6 +12,16 @@ class AuthEventRegister extends AuthEvent {
   final String email;
   final String password;
   const AuthEventRegister(this.email,this.password);
+}
+
+class AuthEventForgetPassword extends AuthEvent{
+  final String? email;
+
+  const AuthEventForgetPassword({this.email});
+}
+class AuthEventCreatingUpdatingNote extends AuthEvent{
+  CloudNote? note;
+   AuthEventCreatingUpdatingNote(this.note);
 }
 class AuthEventShouldRegister extends AuthEvent{
   const AuthEventShouldRegister();
