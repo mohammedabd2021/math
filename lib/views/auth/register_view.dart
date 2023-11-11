@@ -36,6 +36,8 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateRegistering) {
@@ -51,64 +53,121 @@ class _RegisterViewState extends State<RegisterView> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          shape: const ContinuousRectangleBorder(
-              borderRadius: BorderRadius.all(
-            Radius.circular(50),
-          )),
-          title: const Text(
-            'sign in',
-            style: TextStyle(color: Colors.amber),
-          ),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              TextField(
-                cursorColor: Colors.amber,
-                controller: _email,
-                decoration: const InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.amber),
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          child: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                        'assets/images/wallpapertip_black-pattern-wallpaper_118104.jpg'),
+                    fit: BoxFit.fill)),
+            width: width,
+            height: height,
+            child: Padding(
+              padding: EdgeInsets.only(top: height * 0.1),
+              child: Column(
+                children: [
+                  const Image(
+                      image: AssetImage('assets/images/5.png'),
+                      height: 170),
+                  const Text('Sign In',
+                      style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text('Thank you for joining us',
+                      style: TextStyle(color: Colors.amberAccent)),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, bottom: 10, left: 30, right: 30),
+                    child: TextField(style: const TextStyle(color: Colors.white),
+                      cursorColor: Colors.amberAccent,
+                      controller: _email,
+                      decoration: const InputDecoration(
+                          suffix:
+                          Icon(Icons.email_outlined, color: Colors.amber),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white70)),
+                          labelText: 'Email Address',
+                          labelStyle: TextStyle(color: Colors.amberAccent),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.amberAccent),
+                          ),
+                          hintText: 'Enter email address',
+                          hintStyle: TextStyle(color: Colors.white70)),
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    hintText: 'Enter your email'),
-                keyboardType: TextInputType.emailAddress,
-              ), //email
-              TextField(
-                cursorColor: Colors.amber,
-                controller: _password,
-                decoration: const InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.amber),
+                  ),
+                  //email
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, bottom: 30, left: 30, right: 30),
+                    child: TextField(style: const TextStyle(color: Colors.white),
+                      cursorColor: Colors.amberAccent,
+                      controller: _password,
+                      decoration: const InputDecoration(
+                          suffix: Icon(Icons.password_outlined,
+                              color: Colors.amber),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white70)),
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.amberAccent),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.amberAccent),
+                          ),
+                          hintText: 'Enter your password',
+                          hintStyle: TextStyle(color: Colors.white70)),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
                     ),
-                    hintText: 'Enter your password'),
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-              ), //password
-              TextButton(
-                onPressed: () async {
-                  final email = _email.text;
-                  final password = _password.text;
-                  context.read<AuthBloc>().add(
-                        AuthEventRegister(email, password),
+                  ),
+
+                  //password
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        alignment: Alignment.center,
+                        backgroundColor: Colors.amber,
+                        fixedSize: Size(width - 30, 60)),
+                    onPressed: () async {
+                      final email = _email.text;
+                      final password = _password.text;
+
+                      context.read<AuthBloc>().add(
+                        AuthEventRegister(
+                          email,
+                          password,
+                        ),
                       );
-                },
-                child: const Text(
-                    style: TextStyle(color: Colors.amber), 'Register'),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(
+                    },
+                    child: const Text(
+                      'Sign Up',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
                         const AuthEventLogOut(),
                       );
-                },
-                child: const Text(
-                  style: TextStyle(color: Colors.amber),
-                  'already registered? Login here',
-                ),
-              )
-            ],
+                    },
+                    child: const Text(
+                      textAlign: TextAlign.end,
+                      'You already have an account? login now',
+                      style: TextStyle(color: Colors.amber),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

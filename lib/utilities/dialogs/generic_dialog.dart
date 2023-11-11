@@ -13,8 +13,9 @@ Future<T?> showGenericDialog<T>({
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(content),
+          title: Text(title,style: const TextStyle(color: Colors.amber),),
+          backgroundColor: Colors.white,
+          content: Text(content,style: const TextStyle(color: Colors.amberAccent)),
           actions: options.keys.map((optionTitle) {
             final T value = options[optionTitle];
             return TextButton(

@@ -1,4 +1,3 @@
-import 'package:mohammedabdnewproject/services/cloud/cloud_note.dart';
 
 abstract class AuthEvent {
   const AuthEvent();
@@ -19,10 +18,7 @@ class AuthEventForgetPassword extends AuthEvent{
 
   const AuthEventForgetPassword({this.email});
 }
-class AuthEventCreatingUpdatingNote extends AuthEvent{
-  CloudNote? note;
-   AuthEventCreatingUpdatingNote(this.note);
-}
+
 class AuthEventShouldRegister extends AuthEvent{
   const AuthEventShouldRegister();
 }

@@ -51,7 +51,7 @@ LoadingScreenController showOverlay(
                     maxHeight: size.height * 0.8,
                     minWidth: size.width * 0.5),
                 decoration: BoxDecoration(
-                  color: Colors.black12,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Padding(
@@ -74,6 +74,7 @@ LoadingScreenController showOverlay(
                               return Text(
                                 snapshot.data as String,
                                 textAlign: TextAlign.center,
+                                style:const TextStyle(color:Colors.amber)
                               );
                             } else {
                               return Container();

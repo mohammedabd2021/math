@@ -1,4 +1,3 @@
-import 'package:mohammedabdnewproject/services/cloud/cloud_note.dart';
 
 import '../auth_user.dart';
 import 'package:equatable/equatable.dart';
@@ -18,11 +17,7 @@ class AuthStateLogin extends AuthState {
       : super(isLoading: isLoading);
 }
 
-class AuthStateCreatingUpdatingNote extends AuthState {
-  CloudNote? note;
-   AuthStateCreatingUpdatingNote({required bool isLoading,this.note})
-      : super(isLoading: isLoading);
-}
+
 
 class AuthStateForgetPassword extends AuthState {
   final Exception? exception;

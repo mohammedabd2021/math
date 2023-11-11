@@ -18,10 +18,9 @@ class FirebaseCloudStorage {
   Future<void> updateNote({
     required String documentId,
     required String text,
-    required String title,
   }) async {
     try {
-      await notes.doc(documentId).update({textFieldName: text,titleFieldName:title});
+      await notes.doc(documentId).update({textFieldName: text,});
     } catch (e) {
       throw CouldNotUpdateNoteException();
     }
@@ -43,7 +42,7 @@ class FirebaseCloudStorage {
     });
     final fetchedNote = await document.get();
     return CloudNote(
-        documentId: fetchedNote.id, ownerUserId: ownerUserId, text: 'text',title:'title',);
+        documentId: fetchedNote.id, ownerUserId: ownerUserId, text: 'text',);
   }
 
   static final FirebaseCloudStorage _shared =

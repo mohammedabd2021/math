@@ -29,7 +29,7 @@ class NotesListView extends StatelessWidget {
             onTap(note);
           },
           title: Text(
-            note.title,
+            note.text,
             maxLines: 1,
             softWrap: true,
             overflow: TextOverflow.ellipsis,

@@ -8,6 +8,7 @@ import 'package:mohammedabdnewproject/services/auth/bloc/auth_bloc.dart';
 import 'package:mohammedabdnewproject/services/auth/bloc/auth_event.dart';
 import 'package:mohammedabdnewproject/services/auth/bloc/auth_state.dart';
 import 'package:mohammedabdnewproject/services/auth/firebase_auth_provider.dart';
+import 'package:mohammedabdnewproject/views/auth/forgot_password_view.dart';
 import 'package:mohammedabdnewproject/views/auth/login_view.dart';
 import 'package:mohammedabdnewproject/views/auth/register_view.dart';
 import 'package:mohammedabdnewproject/views/auth/Verify_view.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
+
       debugShowCheckedModeBanner: false,
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(FirebaseAuthProvider()),
@@ -58,7 +59,9 @@ class HomePage extends StatelessWidget {
         return const VerifyEmailView();
       } else if (state is AuthStateLoggedOut) {
         return const LoginView();
-      } else if (state is AuthStateRegistering) {
+      }else if (state is AuthStateForgetPassword) {
+        return const ForgotPasswordView();
+      }   else if (state is AuthStateRegistering) {
         return const RegisterView();
       } else {
         return const Scaffold(

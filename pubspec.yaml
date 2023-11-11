@@ -67,6 +67,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/tmp-654d81f413539.png
+    - assets/images/wallpapertip_black-pattern-wallpaper_118104.jpg
+    - assets/images/—Pngtree—golden wonderful lock png_5548675.png
+    - assets/images/5.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
