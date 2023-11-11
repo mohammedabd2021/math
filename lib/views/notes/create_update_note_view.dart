@@ -63,8 +63,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
 
   void _deleteNoteIfTextIsEmpty() async {
     final note = _note;
-    if (_textEditingController.text.isEmpty &&
-        note != null ) {
+    if (_textEditingController.text.isEmpty && note != null) {
       await _notesService.deleteNote(documentId: note.documentId);
     }
   }
@@ -72,8 +71,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   void _saveNoteIfTextNotEmpty() async {
     final note = _note;
     final text = _textEditingController.text;
-    if (note != null &&
-        _textEditingController.text.isNotEmpty ) {
+    if (note != null && _textEditingController.text.isNotEmpty) {
       await _notesService.updateNote(
         documentId: note.documentId,
         text: text,
@@ -93,7 +91,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(backgroundColor: Colors.black54,foregroundColor: Colors.amber,
         actions: [
           IconButton(
             onPressed: () async {
@@ -107,11 +105,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
             icon: const Icon(Icons.share_outlined, color: Colors.amber),
           )
         ],
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(50),
-          ),
-        ),
+
         title: const Text('New Note', style: TextStyle(color: Colors.amber)),
         centerTitle: true,
       ),
@@ -122,18 +116,16 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
             case ConnectionState.done:
               _setupTextControllerListener();
               // print(_textEditingController.text);
-              return
-                  TextField(
-                      cursorColor: Colors.amber,
-                      controller: _textEditingController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                          labelStyle: TextStyle(color: Colors.amber),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.amber)),
-                          hintText: '      write your note here :'));
-
+              return TextField(
+                  cursorColor: Colors.amber,
+                  controller: _textEditingController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                      labelStyle: TextStyle(color: Colors.amber),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber)),
+                      hintText: '      write your note here :'));
 
             default:
               return const Center(

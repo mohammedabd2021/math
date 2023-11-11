@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mohammedabdnewproject/services/auth/auth_services.dart';
 import 'package:mohammedabdnewproject/services/auth/bloc/auth_event.dart';
-import 'package:mohammedabdnewproject/views/auth/login_view.dart';
 
 import '../../services/auth/bloc/auth_bloc.dart';
 
@@ -18,58 +16,83 @@ class VerifyEmailView extends StatefulWidget {
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () async {
-              await AuthServices.firebase().logOut();
-              Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: const Duration(milliseconds: 500),
-                    pageBuilder: (BuildContext context,
-                        Animation<double> animation,
-                        Animation<double> secondaryAnimation) {
-                      return const LoginView();
-                    },
-                    transitionsBuilder: (
-                      context,
-                      animation,
-                      secondaryAnimation,
-                      child,
-                    ) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                  ));
-            },
-            icon: const Icon(
-              Icons.login_outlined,
-              color: Colors.amber,
-            )),
-        shape: const ContinuousRectangleBorder(
-            borderRadius: BorderRadius.all(
-          Radius.circular(50),
-        )),
-        title: const Text('Verify email',style: TextStyle(color: Colors.amber),),
-      ),
-      body: Column(children: [
-        const Text(
-          "We've send to you an email verification "
-          ", Please press on the link that in the email."
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                      'assets/images/wallpapertip_black-pattern-wallpaper_118104.jpg'),
+                  fit: BoxFit.fill)),
+          width: width,
+          height: height,
+          child: Padding(
+            padding: EdgeInsets.only(top: height * 0.2),
+            child: Column(children: [
+              Image(
+                image: const AssetImage('assets/images/4.png'),
+                height: height * 0.2,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, bottom: 10, left: 30, right: 30),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Text(
+                    "We've send to you an email verification "
+                    ", Please press on the link that in the email.",
+                    style: TextStyle(color: Colors.amber, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, bottom: 70, left: 30, right: 30),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Text(
+                    "If you haven't receive any email yet "
+                    ", press the button below",
+                    style: TextStyle(color: Colors.amber, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ElevatedButton(style: ElevatedButton.styleFrom(
+                  alignment: Alignment.center,
+                  backgroundColor: Colors.amber,
+                  fixedSize: Size(width - 130, 50)),
+                  onPressed: () async {
+                    context
+                        .read<AuthBloc>()
+                        .add(const AuthEventSendEmailVerification());
+                  },
+                  child: const Text('send email verification ',
+                      style: TextStyle(color: Colors.white, fontSize: 20))),TextButton(onPressed: () {
+                context.read<AuthBloc>().add(
+                  const AuthEventLogOut(),
+                );
+              },
+                child: const Text(
+                  textAlign: TextAlign.end,
+                  'Do you need to login again? click here',
+                  style: TextStyle(color: Colors.amber),
+                ),)
+            ]),
+          ),
         ),
-        const Text("If you haven't receive any email yet "
-            ", press the button below"),
-        TextButton(
-            onPressed: () async {
-context.read<AuthBloc>().add(const AuthEventSendEmailVerification());            },
-            child: const Text('send email verification ',style: TextStyle(color: Colors.amber))),
-      ]),
+      ),
     );
   }
 }

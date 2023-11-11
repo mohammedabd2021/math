@@ -37,21 +37,17 @@ class notes_viewState extends State<notes_view> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(backgroundColor: Colors.black54,
         title: const Text(
           'Your Notes ',
           style: TextStyle(color: Colors.amber),
         ),
         centerTitle: true,
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(50),
-          ),
-        ),
+
         actions: [
           PopupMenuButton<MenuAction>(
             icon: const Icon(
-              Icons.swipe_vertical_outlined,
+              Icons.settings,
               color: Colors.amber,
             ),
             onSelected: (value) async {

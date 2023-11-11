@@ -68,9 +68,9 @@ class _RegisterViewState extends State<RegisterView> {
               padding: EdgeInsets.only(top: height * 0.1),
               child: Column(
                 children: [
-                  const Image(
-                      image: AssetImage('assets/images/5.png'),
-                      height: 170),
+                   Image(
+                      image: const AssetImage('assets/images/5.png'),
+                      height: height*0.2),
                   const Text('Sign In',
                       style: TextStyle(
                           color: Colors.amber,

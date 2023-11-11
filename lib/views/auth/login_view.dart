@@ -68,9 +68,9 @@ class _LoginViewState extends State<LoginView> {
               padding: EdgeInsets.only(top: height * 0.1),
               child: Column(
                 children: [
-                  const Image(
-                      image: AssetImage('assets/images/tmp-654d81f413539.png'),
-                      height: 170),
+                   Image(
+                      image: const AssetImage('assets/images/tmp-654d81f413539.png'),
+                      height: height*0.2),
                   const Text('Welcome back',
                       style: TextStyle(
                           color: Colors.amber,

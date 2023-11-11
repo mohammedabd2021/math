@@ -19,33 +19,47 @@ class NotesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: notes.length,
-      itemBuilder: (context, index) {
-        final note = notes.elementAt(index);
-        return ListTile(
-          onTap: () {
-            onTap(note);
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/wallpapertip_black-pattern-wallpaper_118104.jpg'),
+              fit: BoxFit.fill)),
+      child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: notes.length,
+          itemBuilder: (context, index) {
+            final note = notes.elementAt(index);
+            return Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white70,
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(20)),
+                child: ListTile(
+                  onTap: () {
+                    onTap(note);
+                  },
+                  onLongPress: () async {
+                    final shouldDelete = await showDeleteDialog(context);
+                    if (shouldDelete) {
+                      onDeleteNote(note);
+                    }
+                  },
+                  title: Text(
+                    note.text,
+                    softWrap: true,
+                  ),
+                ),
+              ),
+            );
           },
-          title: Text(
-            note.text,
-            maxLines: 1,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: IconButton(
-            onPressed: () async {
-              final shouldDelete = await showDeleteDialog(context);
-              if (shouldDelete) {
-                onDeleteNote(note);
-              }
-            },
-            icon: const Icon(Icons.delete),
-            color: Colors.amber,
-          ),
-        );
-      },
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.8)),
     );
   }
 }
