@@ -10,7 +10,6 @@ class LoadingScreen {
 
   LoadingScreen._sharedInstance();
 
-
   LoadingScreenController? controller;
 
   void show({
@@ -32,6 +31,7 @@ class LoadingScreen {
     controller = null;
   }
 }
+
 LoadingScreenController showOverlay(
     {required BuildContext context, required String text}) {
   // ignore: no_leading_underscores_for_local_identifiers
@@ -62,8 +62,6 @@ LoadingScreenController showOverlay(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                         const SizedBox(height: 10),
-                        const CircularProgressIndicator(color:Colors.amber),
-                        const SizedBox(height: 10),
                         StreamBuilder(
                           stream: _text.stream,
                           builder: (
@@ -71,16 +69,26 @@ LoadingScreenController showOverlay(
                             snapshot,
                           ) {
                             if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data as String,
-                                textAlign: TextAlign.center,
-                                style:const TextStyle(color:Colors.amber)
-                              );
+                              return Text(snapshot.data as String,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.amber));
                             } else {
                               return Container();
                             }
                           },
-                        )
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(30)),
+                          width: 50,
+                          height: 50,
+                          child: Image(
+                              image: AssetImage(
+                                  'assets/images/writing-notepad (1).gif'),
+                              fit: BoxFit.cover),
+                        ),
                       ])),
                 )),
           ));

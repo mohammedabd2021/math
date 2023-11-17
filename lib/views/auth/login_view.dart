@@ -10,7 +10,6 @@ import '../../services/auth/bloc/auth_bloc.dart';
 import '../../services/auth/bloc/auth_event.dart';
 import '../../services/auth/bloc/auth_state.dart';
 import '../../utilities/dialogs/error_dialog.dart';
-
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 

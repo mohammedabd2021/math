@@ -13,7 +13,6 @@ import 'package:mohammedabdnewproject/views/auth/login_view.dart';
 import 'package:mohammedabdnewproject/views/auth/register_view.dart';
 import 'package:mohammedabdnewproject/views/auth/Verify_view.dart';
 import 'package:mohammedabdnewproject/views/notes/notes_view.dart';
-
 import 'package:mohammedabdnewproject/views/notes/create_update_note_view.dart';
 
 void main() {
@@ -27,7 +26,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(FirebaseAuthProvider()),
